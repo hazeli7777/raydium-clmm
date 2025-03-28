@@ -8,6 +8,98 @@
 - 已创建 Solana 钱包（部署者钱包）
 - 确保钱包中有足够的 SOL 支付交易费用
 
+## 测试网环境设置与测试
+
+### 本地测试网启动
+
+1. **启动本地测试验证节点**
+   ```bash
+   solana-test-validator
+   ```
+   保持此终端窗口运行，验证节点会持续运行。
+
+2. **新开终端，配置连接到本地测试网**
+   ```bash
+   solana config set --url http://127.0.0.1:8899
+   ```
+
+3. **创建测试钱包（如果需要）**
+   ```bash
+   solana-keygen new -o test-wallet.json
+   ```
+
+4. **为测试钱包充值**
+   ```bash
+   solana airdrop 2 $(solana-keygen pubkey test-wallet.json)
+   ```
+
+### 构建和测试
+
+1. **安装项目依赖**
+   ```bash
+   yarn install
+   ```
+
+2. **构建项目**
+   ```bash
+   anchor build
+   ```
+
+3. **运行测试套件**
+   ```bash
+   anchor test
+   ```
+   这将执行 `tests/` 目录下的所有测试用例。
+
+4. **检查测试覆盖率**
+   ```bash
+   anchor test --coverage
+   ```
+
+### 测试网交互
+
+1. **创建测试代币**
+   ```bash
+   spl-token create-token --decimals 6
+   ```
+
+2. **创建代币账户**
+   ```bash
+   spl-token create-account <TOKEN_ADDRESS>
+   ```
+
+3. **铸造测试代币**
+   ```bash
+   spl-token mint <TOKEN_ADDRESS> <AMOUNT> <RECIPIENT_ADDRESS>
+   ```
+
+4. **查看代币余额**
+   ```bash
+   spl-token balance <TOKEN_ADDRESS>
+   ```
+
+### 常见测试问题解决
+
+1. **测试网连接问题**
+   - 确保本地验证节点正在运行
+   - 检查网络配置是否正确
+   ```bash
+   solana config get
+   ```
+
+2. **余额不足**
+   - 使用 airdrop 命令获取更多测试 SOL
+   ```bash
+   solana airdrop 2 <WALLET_ADDRESS>
+   ```
+
+3. **交易失败**
+   - 检查程序日志
+   ```bash
+   solana logs
+   ```
+   - 使用 Solana Explorer 查看详细错误信息
+
 ## 测试网部署步骤
 
 1. **配置 Solana CLI 连接到测试网**
